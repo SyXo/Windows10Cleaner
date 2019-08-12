@@ -138,3 +138,20 @@ Function RemoveXboxRelatedExe
 	icacls "C:\Windows\System32\GameBarPresenceWriter.exe" /grant administrateurs:f
 	Remove-Item -Path "C:\Windows\System32\GameBarPresenceWriter.exe" -Force
 }
+
+DetectRamQuantity
+DisableBackgroundApps
+DisableDefender
+DisableDefenderCloud
+DisableEdgeBackground
+DisableFirewall
+DisableHPET
+DisableNdu
+DisablePrefetch
+DisableUpdateMSRT
+DisableWindowsFunctionalities
+DisableXboxFunctionnalities
+ExploitRamQuantity
+ImproveResponsiveness
+RemoveXboxRelatedExe
+RemoveTempFiles
