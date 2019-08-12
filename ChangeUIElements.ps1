@@ -3,7 +3,7 @@ $ErrorActionPreference = "SilentlyContinue"
 
 Function DisableActionCenter
 {
-	If (!(Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer")) {
+	if (!(Test-Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer")) {
 		New-Item -Path "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" | Out-Null
 	}
 	Set-ItemProperty -Path "SOFTWARE\Policies\Microsoft\Windows\Explorer" DisableNotificationCenter -Value 1
@@ -11,7 +11,7 @@ Function DisableActionCenter
 
 Function DisableStickyKeys
 {
-	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" -Name "Flags" -Type String -Value "506"
+	Set-ItemProperty -Path "HKCU:\Control Panel\Accessibility\StickyKeys" Flags -Value "506"
 }
 
 Function DisableThumbsDB
@@ -49,12 +49,12 @@ Function EnableBlackTheme
 
 Function EnableNumlockAtStartup
 {
-	If (!(Test-Path "HKU:")) {
+	if (!(Test-Path "HKU:")) {
 		New-PSDrive -Name HKU -PSProvider Registry -Root HKEY_USERS | Out-Null
 	}
 	Set-ItemProperty -Path "HKU:\.DEFAULT\Control Panel\Keyboard" -Name "InitialKeyboardIndicators" -Type DWord -Value 2147483650
 	Add-Type -AssemblyName System.Windows.Forms
-	If (!([System.Windows.Forms.Control]::IsKeyLocked('NumLock'))) {
+	if (!([System.Windows.Forms.Control]::IsKeyLocked('NumLock'))) {
 		$wsh = New-Object -ComObject WScript.Shell
 		$wsh.SendKeys('{NUMLOCK}')
 	}
@@ -131,10 +131,10 @@ Function ShowKnownExtensions
 Function ShowTaskManagerDetails
 {
 	$taskmgr = Start-Process -WindowStyle Hidden -FilePath taskmgr.exe -PassThru
-	Do {
+	do {
 		Start-Sleep -Milliseconds 100
 		$preferences = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -ErrorAction SilentlyContinue
-	} Until ($preferences)
+	} until ($preferences)
 	Stop-Process $taskmgr
 	$preferences.Preferences[28] = 0
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -Type Binary -Value $preferences.Preferences
@@ -157,7 +157,7 @@ Function UnpinStartMenuIcons
 
 Function UnpinTaskbarIcons
 {
-	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Name "Favorites" -Type Binary -Value ([byte[]](255))
+	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband" Favorites -Value ([byte[]](255))
 	Remove-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Taskband" -Name "FavoritesResolve" -ErrorAction SilentlyContinue
 }
 
