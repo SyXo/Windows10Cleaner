@@ -82,7 +82,7 @@ Function DisableUpdateMSRT
 Function DisableWindowsFunctionalities
 {
 	$toRemove = 'MediaPlayback|FaxServicesClientPackage|Containers'
-	Get-WindowsOptionalFeature -Online | Where-Object {$_.State -Match "Enabled" -And $_.FeatureName -Match $toRemove} | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue
+	Get-WindowsOptionalFeature -Online | Where-Object { $_.State -Match "Enabled" -And $_.FeatureName -Match $toRemove } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue
 }
 
 Function DisableXboxFunctionnalities

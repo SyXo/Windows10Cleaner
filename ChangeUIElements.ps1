@@ -78,7 +78,7 @@ Function HideSyncNotifications
 
 Function HideTaskbarPeopleIcon
 {
-	If (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People")) {
+	if (!(Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People")) {
 		New-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" | Out-Null
 	}
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\People" PeopleBand -Value 0
@@ -137,7 +137,7 @@ Function ShowTaskManagerDetails
 	} until ($preferences)
 	Stop-Process $taskmgr
 	$preferences.Preferences[28] = 0
-	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" -Name "Preferences" -Type Binary -Value $preferences.Preferences
+	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\TaskManager" Preferences -Value $preferences.Preferences
 }
 
 Function UnpinStartMenuIcons
