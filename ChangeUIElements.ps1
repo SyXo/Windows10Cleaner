@@ -175,4 +175,4 @@ SetExplorerThisPC
 SetVisualFXPerformance
 ShowKnownExtensions
 UnpinStartMenuIcons
-UnpinTaskbarIcons
+# UnpinTaskbarIcons

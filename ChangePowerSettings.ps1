@@ -36,11 +36,12 @@ Function DisableHibernation
 Function EnhanceBootSequence
 {
 	bcdedit /timeout 10
-	bcdedit /set {current} quietboot No
+	bcdedit /set quietboot No
+	bcdedit /set quietboot Off
 }
 
-ChangeSleepTimeout
-ChangePowerPlan
+#ChangeSleepTimeout
+#ChangePowerPlan
 DisableFastBoot
 DisableHibernation
 EnhanceBootSequence
