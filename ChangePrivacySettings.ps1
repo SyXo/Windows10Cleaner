@@ -82,7 +82,7 @@ Function DisableFeedbackExperience
 	}
 	Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" NumberOfSIUFInPeriod -Value 0
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" DoNotShowFeedbackNotifications -Value 1
-	Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" PeriodInNanoSeconds -Value 0 
+	Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Siuf\Rules" PeriodInNanoSeconds -Value 0
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
 	Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
 }

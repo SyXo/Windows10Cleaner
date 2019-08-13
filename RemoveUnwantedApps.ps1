@@ -233,14 +233,6 @@ Function PreventAppsReinstallation
 	$registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent"
 	$registryOEM = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 
-	If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore")) {
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore"
-		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate"
-	}
-	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate" AutoDownload -Value 2
-	If (!(Test-Path $registryPath)) {
-		New-Item $registryPath
-	}
 	Set-ItemProperty $registryPath DisableWindowsConsumerFeatures -Value 1
 	If (!(Test-Path $registryOEM)) {
 		New-Item $registryOEM
