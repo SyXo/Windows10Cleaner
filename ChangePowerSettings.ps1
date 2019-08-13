@@ -40,8 +40,8 @@ Function EnhanceBootSequence
 	bcdedit /set quietboot Off
 }
 
-#ChangeSleepTimeout
-#ChangePowerPlan
+ChangeSleepTimeout
+ChangePowerPlan
 DisableFastBoot
 DisableHibernation
 EnhanceBootSequence

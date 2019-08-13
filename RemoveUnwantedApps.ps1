@@ -9,6 +9,15 @@ Function DisableOneDrive
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\OneDrive" DisableFileSyncNGSC -Value 1
 }
 
+Function DisableWindowsFunctionalities
+{
+	<#
+	## $toRemove = 'MediaPlayback|FaxServicesClientPackage|Containers'
+	## Get-WindowsOptionalFeature -Online | Where-Object { $_.State -Match "Enabled" -And $_.FeatureName -Match $toRemove } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue
+	#>
+	Disable-WindowsOptionalFeature -Online -FeatureName "Internet-Explorer-Optional-$env:PROCESSOR_ARCHITECTURE" -NoRestart -WarningAction SilentlyContinue | Out-Null
+}
+
 Function BackupOneDriveFiles
 {
 	if (Test-Path "$env:USERPROFILE\OneDrive\") {
@@ -141,10 +150,6 @@ Function UninstallMicrosoftIncludedApps
 	}
 }
 
-Function UninstallInternetExplorer
-{
-	Disable-WindowsOptionalFeature -Online -FeatureName "Internet-Explorer-Optional-$env:PROCESSOR_ARCHITECTURE" -NoRestart -WarningAction SilentlyContinue | Out-Null
-}
 
 Function UninstallWindowsStoreApps
 {
@@ -198,14 +203,14 @@ Function RemoveAssociatedRegitryKeys
 
 		# Windows File
 		"HKCR:\Extensions\ContractId\Windows.File\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
-            
+
 		# Registry keys to delete if they aren't uninstalled by RemoveAppXPackage/RemoveAppXProvisionedPackage
 		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\46928bounde.EclipseManager_2.2.4.51_neutral__a5h4egax66k6y"
 		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\ActiproSoftwareLLC.562882FEEB491_2.6.18.18_neutral__24pqs290vpjk0"
 		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.PPIProjection_10.0.15063.0_neutral_neutral_cw5n1h2txyewy"
 		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.15063.0.0_neutral_neutral_cw5n1h2txyewy"
 		"HKCR:\Extensions\ContractId\Windows.Launch\PackageId\Microsoft.XboxGameCallableUI_1000.16299.15.0_neutral_neutral_cw5n1h2txyewy"
-            
+
 		# Scheduled Tasks to delete
 		"HKCR:\Extensions\ContractId\Windows.PreInstalledConfigTask\PackageId\Microsoft.MicrosoftOfficeHub_17.7909.7600.0_x64__8wekyb3d8bbwe"
 
@@ -233,26 +238,26 @@ Function PreventAppsReinstallation
 		New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate"
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate" AutoDownload -Value 2
-	If (!(Test-Path $registryPath)) { 
+	If (!(Test-Path $registryPath)) {
 		New-Item $registryPath
 	}
-	Set-ItemProperty $registryPath DisableWindowsConsumerFeatures -Value 1 
+	Set-ItemProperty $registryPath DisableWindowsConsumerFeatures -Value 1
 	If (!(Test-Path $registryOEM)) {
 		New-Item $registryOEM
 	}
-	Set-ItemProperty $registryOEM ContentDeliveryAllowed -Value 0 
-	Set-ItemProperty $registryOEM OemPreInstalledAppsEnabled -Value 0 
-	Set-ItemProperty $registryOEM PreInstalledAppsEnabled -Value 0 
-	Set-ItemProperty $registryOEM PreInstalledAppsEverEnabled -Value 0 
-	Set-ItemProperty $registryOEM SilentInstalledAppsEnabled -Value 0 
-	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0          
+	Set-ItemProperty $registryOEM ContentDeliveryAllowed -Value 0
+	Set-ItemProperty $registryOEM OemPreInstalledAppsEnabled -Value 0
+	Set-ItemProperty $registryOEM PreInstalledAppsEnabled -Value 0
+	Set-ItemProperty $registryOEM PreInstalledAppsEverEnabled -Value 0
+	Set-ItemProperty $registryOEM SilentInstalledAppsEnabled -Value 0
+	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0
 }
 
 DisableOneDrive
+DisableWindowsFunctionalities
 #UninstallMicrosoftIncludedApps
 #UninstallWindowsStoreApps
 PreventAppsReinstallation
 RemoveAssociatedRegitryKeys
 UninstallAllButWhitelisted
-UninstallInternetExplorer
 UninstallOneDrive

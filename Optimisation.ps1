@@ -79,12 +79,6 @@ Function DisableUpdateMSRT
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\MRT" -Name "DontOfferThroughWUAU" -Type DWord -Value 1
 }
 
-Function DisableWindowsFunctionalities
-{
-	$toRemove = 'MediaPlayback|FaxServicesClientPackage|Containers'
-	Get-WindowsOptionalFeature -Online | Where-Object { $_.State -Match "Enabled" -And $_.FeatureName -Match $toRemove } | Disable-WindowsOptionalFeature -Online -NoRestart -WarningAction SilentlyContinue
-}
-
 Function DisableXboxFunctionnalities
 {
 	Set-ItemProperty -Path "HKCU:\System\GameConfigStore" GameDVR_Enabled -Value 0
@@ -149,7 +143,6 @@ DisableHPET
 DisableNdu
 DisablePrefetch
 DisableUpdateMSRT
-DisableWindowsFunctionalities
 DisableXboxFunctionnalities
 ExploitRamQuantity
 ImproveResponsiveness
