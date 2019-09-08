@@ -36,6 +36,7 @@ Function BackupOneDriveFiles
 Function UninstallOneDrive
 {
 	BackupOneDriveFiles
+	DisableOneDrive
 	Stop-Process -Name "OneDrive" -ErrorAction SilentlyContinue
 	Start-Sleep -s 2
 	$onedrive = "$env:SYSTEMROOT\SysWOW64\OneDriveSetup.exe"
@@ -57,137 +58,30 @@ Function UninstallOneDrive
 	Remove-Item -Path "HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" -Recurse -ErrorAction SilentlyContinue
 }
 
-Function UninstallAllButWhitelisted
+Function UninstallUnwantedUWP
 {
-	$WhitelistedApps = 'Microsoft.WindowsCalculator|Microsoft.WindowsStore|Microsoft.Windows.Photos|Microsoft.MSPaint|Microsoft.WindowsCamera|.NET|Framework'
+	$WhitelistedApps = 'Microsoft.WindowsCalculator|Microsoft.WindowsStore|Microsoft.Windows.Photos|Microsoft.MSPaint|Microsoft.WindowsCamera|.NET|Framework|Microsoft.ScreenSketch|Microsoft.WindowsAlarms'
 	$NonRemovable = '1527c705-839a-4832-9118-54d4Bd6a0c89|c5e2524a-ea46-4f67-841f-6a9465d9d515|E2A4F912-2574-4A75-9BB0-0D023378592B|F46D4000-FD22-4DB4-AC8E-4E1DDDE828FE|InputApp|Microsoft.AAD.BrokerPlugin|Microsoft.AccountsControl|`
 	Microsoft.BioEnrollment|Microsoft.CredDialogHost|Microsoft.ECApp|Microsoft.LockApp|Microsoft.MicrosoftEdgeDevToolsClient|Microsoft.MicrosoftEdge|Microsoft.PPIProjection|Microsoft.Win32WebViewHost|Microsoft.Windows.Apprep.ChxApp|`
 	Microsoft.Windows.AssignedAccessLockApp|Microsoft.Windows.CapturePicker|Microsoft.Windows.CloudExperienceHost|Microsoft.Windows.ContentDeliveryManager|Microsoft.Windows.Cortana|Microsoft.Windows.NarratorQuickStart|`
 	Microsoft.Windows.ParentalControls|Microsoft.Windows.PeopleExperienceHost|Microsoft.Windows.PinningConfirmationDialog|Microsoft.Windows.SecHealthUI|Microsoft.Windows.SecureAssessmentBrowser|Microsoft.Windows.ShellExperienceHost|`
 	Microsoft.Windows.XGpuEjectDialog|Microsoft.XboxGameCallableUI|Windows.CBSPreview|windows.immersivecontrolpanel|Windows.PrintDialog|Microsoft.VCLibs.140.00|Microsoft.Services.Store.Engagement|Microsoft.UI.Xaml.2.0'
 
-	Get-AppxPackage -AllUsers | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage | Out-Null
-	Get-AppxPackage | Where-Object {$_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable} | Remove-AppxPackage | Out-Null
-	Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -NotMatch $WhitelistedApps -and $_.PackageName -NotMatch $NonRemovable} | Remove-AppxProvisionedPackage -Online | Out-Null
+	Get-AppxPackage -AllUsers | Where-Object { $_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable } | Remove-AppxPackage | Out-Null
+	Get-AppxPackage | Where-Object { $_.Name -NotMatch $WhitelistedApps -and $_.Name -NotMatch $NonRemovable } | Remove-AppxPackage | Out-Null
+	Get-AppxProvisionedPackage -Online | Where-Object { $_.PackageName -NotMatch $WhitelistedApps -and $_.PackageName -NotMatch $NonRemovable } | Remove-AppxProvisionedPackage -Online | Out-Null
 }
 
-Function UninstallMicrosoftIncludedApps
+Function UninstallPreloadedSoft
 {
-	$Apps = @(
-		"Microsoft.3DBuilder"
-		"Microsoft.AppConnector"
-		"Microsoft.BingFinance"
-		"Microsoft.BingNews"
-		"Microsoft.BingSports"
-		"Microsoft.BingTranslator"
-		"Microsoft.BingWeather"
-		"Microsoft.CloudExperienceHost"
-		"Microsoft.CommsPhone"
-		"Microsoft.ConnectivityStore"
-		"Microsoft.GetHelp"
-		"Microsoft.Getstarted"
-		"Microsoft.HEIFImageExtension"
-		"Microsoft.Messaging"
-		"Microsoft.Microsoft3DViewer"
-		"Microsoft.MicrosoftOfficeHub"
-		"Microsoft.MicrosoftPowerBIForWindows"
-		"Microsoft.MicrosoftSolitaireCollection"
-		"Microsoft.MicrosoftStickyNotes"
-		"Microsoft.MinecraftUWP"
-		"Microsoft.MixedReality.Portal"
-		# "Microsoft.MSPaint"
-		"Microsoft.NetworkSpeedTest"
-		"Microsoft.Office.Excel"
-		"Microsoft.Office.OneNote"
-		"Microsoft.Office.PowerPoint"
-		"Microsoft.Office.Sway"
-		"Microsoft.Office.Word"
-		"Microsoft.OneConnect"
-		"Microsoft.People"
-		"Microsoft.Print3D"
-		"Microsoft.RemoteDesktop"
-		"Microsoft.Services.Store.Engagement"
-		# "Microsoft.ScreenSketch"
-		"Microsoft.SolitareCollection"
-		"Microsoft.StickyNotes"
-		"Microsoft.StorePurchaseApp"
-		"Microsoft.SkypeApp"
-		"Microsoft.VP9VideoExtensions"
-		"Microsoft.Wallet"
-		"Microsoft.WebMediaExtensions"
-		"Microsoft.WebpImageExtension"
-		# "Microsoft.WindowsAlarms"
-		"Microsoft.WindowsCamera"
-		# "Microsoft.WindowsCalculator"
-		"Microsoft.Windows.ContactSupport"
-		"Microsoft.Windows.Cortana"
-		"Microsoft.Windows.HolographicFirstRun"
-		"microsoft.windowscommunicationsapps"
-		"Microsoft.WindowsFeedbackHub"
-		"Microsoft.WindowsFeedback"
-		"Microsoft.WindowsMaps"
-		"Microsoft.Windows.ParentalControls"
-		"Microsoft.Windows.PeopleExperienceHost"
-		"Microsoft.WindowsPhone"
-		# "Microsoft.Windows.Photos"
-		"Microsoft.Windows.SecHealthUI"
-		"Microsoft.WindowsSoundRecorder"
-		# "Microsoft.WindowsStore"
-		"Microsoft.Xbox.TCUI"
-		"Microsoft.XboxApp"
-		"Microsoft.XboxGameCallableUI"
-		"Microsoft.XboxGameOverlay"
-		"Microsoft.XboxGamingOverlay"
-		"Microsoft.XboxIdentityProvider"
-		"Microsoft.XboxSpeechToTextOverlay"
-		"Microsoft.YourPhone"
-		"Microsoft.ZuneMusic"
-		"Microsoft.ZuneVideo"
-	)
-	ForEach ($App in $Apps) {
-		Get-AppxPackage -AllUsers -Name $App | Remove-AppxPackage
-		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online
+	$apps = Get-WmiObject Win32_Product | Where-Object {
+		$_.Name -NotLike "*Intel*" -and
+		$_.Name -NotLike "*Synaptics*" -and
+		$_.Name -NotLike "*Workspace" -and
+		$_.Name -NotLike "*Audio*" -and
+		$_.Name -NotLike "*Network*"
 	}
-}
-
-
-Function UninstallWindowsStoreApps
-{
-	$Apps = @(
-		"ACGMediaPlayer"
-		"ActiproSoftwareLLC"
-		"AdobePhotoshopExpress"
-		"AutodeskSketchBook"
-		"Asphalt8Airborne"
-		"BubbleWitch3Saga"
-		"CandyCrushSodaSaga"
-		"CyberLinkMediaSuiteEssentials"
-		"DisneyMagicKingdoms"
-		"DolbyAccess"
-		"Drawboard"
-		"Duolingo-LearnLanguagesforFree"
-		"EclipseManager"
-		"Facebook"
-		"FarmVille2CountryEscape"
-		"HiddenCityMysteryofShadows"
-		"Keeper"
-		"LinkedInforWindows"
-		"MarchofEmpires"
-		"Netflix"
-		"OneCalendar"
-		"PandoraMediaInc"
-		"Plex"
-		"RoyalRevolt2"
-		"SpotifyMusic"
-		"Twitter"
-		"Viber"
-		"WinZipUniversal"
-		"XING"
-	)
-	ForEach ($App in $Apps) {
-		Get-AppxPackage -AllUsers -Name $App | Remove-AppxPackage
-		Get-AppxProvisionedPackage -Online | Where-Object DisplayName -like $App | Remove-AppxProvisionedPackage -Online
-	}
+	$apps.uninstall()
 }
 
 Function RemoveAssociatedRegitryKeys
@@ -245,11 +139,9 @@ Function PreventAppsReinstallation
 	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0
 }
 
-DisableOneDrive
 DisableWindowsFunctionalities
-#UninstallMicrosoftIncludedApps
-#UninstallWindowsStoreApps
 PreventAppsReinstallation
 RemoveAssociatedRegitryKeys
-UninstallAllButWhitelisted
 UninstallOneDrive
+UninstallPreloadedSoft
+UninstallUnwantedUWP
