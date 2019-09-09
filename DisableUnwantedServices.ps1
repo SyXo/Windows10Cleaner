@@ -40,7 +40,7 @@ Function DisableUnwantedServices
 		"XblGameSave"					# Xbox Live Game Save Service
 		"XboxNetApiSvc"					# Xbox Live Networking Service
 	)
-	Foreach ($service in $services) {
+	ForEach ($service in $services) {
 		Stop-Service $service -WarningAction SilentlyContinue
 		Set-Service $service -StartupType Disabled
 	}

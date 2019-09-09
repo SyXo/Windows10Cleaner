@@ -68,4 +68,4 @@ Function DisableWindowsUpgrade
 
 DisableUnwantedScheduledTasks
 DisableAutoWindowsUpdate
-DisableWindowsUpgrade
+#DisableWindowsUpgrade
