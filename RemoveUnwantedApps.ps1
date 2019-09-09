@@ -128,7 +128,7 @@ Function PreventAppsReinstallation
 	$registryOEM = "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager"
 
 	Set-ItemProperty $registryPath DisableWindowsConsumerFeatures -Value 1
-	If (!(Test-Path $registryOEM)) {
+	if (!(Test-Path $registryOEM)) {
 		New-Item $registryOEM
 	}
 	Set-ItemProperty $registryOEM ContentDeliveryAllowed -Value 0

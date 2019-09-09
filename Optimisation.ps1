@@ -3,9 +3,9 @@ $ErrorActionPreference = "SilentlyContinue"
 
 Function DetectRamQuantity
 {
-    $PhysicalRAM = (Get-WMIObject -class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum | % {[Math]::Round(($_.sum / 1GB), 2)})
+	$PhysicalRAM = (Get-WMIObject -class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum | % {[Math]::Round(($_.sum / 1GB), 2)})
 
-    return ($PhysicalRAM)
+	return ($PhysicalRAM)
 }
 
 Function DisableBackgroundApps
@@ -89,6 +89,26 @@ Function DisableXboxFunctionnalities
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AppCaptureEnabled -Value 0
 }
 
+Function EnableMSI
+{
+	$PCI = Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Enum\PCI"
+
+	ForEach ($element in $PCI) {
+		$Key = $element.Name -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+		$Subkey = Get-ChildItem $Key
+		$Subkey = $Subkey -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+		$value = Get-ItemProperty -Path $Subkey -Name "DeviceDesc"
+		if ($value -match "amd" -or $value -match "nvidia" -or $value -match "audio") {
+			$msi = $Subkey + "\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties"
+			if (!(Test-Path $msi)) {
+				New-Item -Path $msi | Out-Null
+				New-ItemProperty -Path $msi -Name MSISupported
+			}
+			Set-ItemProperty -Path $msi -Name MSISupported -Value 1
+		}
+	}
+}
+
 Function ExploitRamQuantity
 {
 	$ram = DetectRamQuantity
@@ -133,7 +153,6 @@ Function RemoveXboxRelatedExe
 	Remove-Item -Path "C:\Windows\System32\GameBarPresenceWriter.exe" -Force
 }
 
-DetectRamQuantity
 DisableBackgroundApps
 DisableDefender
 DisableDefenderCloud
@@ -144,6 +163,7 @@ DisableNdu
 DisablePrefetch
 DisableUpdateMSRT
 DisableXboxFunctionnalities
+EnableMSI
 ExploitRamQuantity
 ImproveResponsiveness
 RemoveXboxRelatedExe
