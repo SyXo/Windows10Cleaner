@@ -89,17 +89,32 @@ Function DisableXboxFunctionnalities
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AppCaptureEnabled -Value 0
 }
 
+Function InstallTimerTool
+{
+	$url = "https://vvvv.org/sites/all/modules/general/pubdlcnt/pubdlcnt.php?file=https://vvvv.org/sites/default/files/uploads/TimerToolV3.zip&nid=112931"
+	$zipLocation = $env:USERPROFILE + "\Downloads\TimerTool.zip"
+	$folderLocation = $env:USERPROFILE + "\Downloads\TimerTool"
+	$startupShortcutLocation = $env:APPDATA + "\Microsoft\Windows\Start Menu\Programs\Startup\TimerTool.bat"
+
+	Invoke-WebRequest -Uri $url -OutFile $zipLocation
+	Expand-Archive $zipLocation -DestinationPath $folderLocation
+	Move-Item -Path $folderLocation -Destination "C:\Program Files"
+	Remove-Item -Path $zipLocation
+	echo 'start "" "C:\Program Files\TimerTool.exe" -t 0.5 -minimized' > $startupShortcutLocation
+	echo exit >> $startupShortcutLocation
+}
+
 Function EnableMSI
 {
-	$PCI = Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Enum\PCI"
+	$pci = Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Enum\PCI"
 
-	ForEach ($element in $PCI) {
-		$Key = $element.Name -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-		$Subkey = Get-ChildItem $Key
-		$Subkey = $Subkey -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+	ForEach ($element in $pci) {
+		$key = $element.Name -replace "HKEY_LOCAL_MACHINE", "HKLM:"
+		$subkey = Get-ChildItem $key
+		$subkey = $subkey -replace "HKEY_LOCAL_MACHINE", "HKLM:"
 		$value = Get-ItemProperty -Path $Subkey -Name "DeviceDesc"
 		if ($value -match "amd" -or $value -match "nvidia" -or $value -match "audio") {
-			$msi = $Subkey + "\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties"
+			$msi = $subkey + "\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties"
 			if (!(Test-Path $msi)) {
 				New-Item -Path $msi | Out-Null
 				New-ItemProperty -Path $msi -Name MSISupported
@@ -166,5 +181,6 @@ DisableXboxFunctionnalities
 EnableMSI
 ExploitRamQuantity
 ImproveResponsiveness
+InstallTimerTool
 RemoveXboxRelatedExe
 RemoveTempFiles
