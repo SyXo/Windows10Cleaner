@@ -55,10 +55,11 @@ Function DisableFirewall
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile" EnableFirewall -Value 0
 }
 
-Function DisableHPET
+Function DisableSyntheticTimers
 {
-	bcdedit /deletevalue useplatformclock
-	bcdedit /set disabledynamictick Yes
+	bcdedit /set useplatformtick yes
+	bcdedit /set useplatformclock no
+	bcdedit /set disabledynamictick yes
 }
 
 Function DisableNdu
