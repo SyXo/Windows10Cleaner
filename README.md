@@ -8,7 +8,7 @@ The goal of the project is to tweak your operating system to get it as responsiv
 
 I didn't event anything, and I am very much based on these people :
 * [Capet](https://www.youtube.com/channel/UCNYDmiDIjVlrEhNyTs62DbQ)
-* [FR33THY]https://www.youtube.com/channel/UCzBPlB3pl9FvNfP1Uk4RKaw)
+* [FR33THY](https://www.youtube.com/channel/UCzBPlB3pl9FvNfP1Uk4RKaw)
 * [W4RH4WK](https://github.com/W4RH4WK/Debloat-Windows-10)
 
 Big thanks to them.
