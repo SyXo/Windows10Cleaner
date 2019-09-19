@@ -32,6 +32,19 @@ Function DisableContentDeliveryManager
 	Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" -Name SilentInstalledAppsEnabled -Value 0
 }
 
+Function Disable3DApps
+{
+	for /f "tokens=1* delims=" %I in (' reg query "HKEY_CLASSES_ROOT\SystemFileAssociations" /s /k /f "3D Edit" ^| find /i "3D Edit" ') do (reg delete "%I" /f )
+	for /f "tokens=1* delims=" %I in (' reg query "HKEY_CLASSES_ROOT\SystemFileAssociations" /s /k /f "3D Print" ^| find /i "3D Print" ') do (reg delete "%I" /f )
+}
+
+Function DisableEdge
+{
+	mv C:\Windows\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe C:\Windows\SystemApps\Microsoft.MicrosoftEdge_8wekyb3d8bbwe_BAK
+	reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\MicrosoftEdge.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
+	Get-WindowsPackage -Online | Where PackageName -like *InternetExplorer* | Remove-WindowsPackage -Online -NoRestart
+}
+
 Function DisableOneDrive
 {
 	if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\OneDrive")) {
@@ -81,6 +94,11 @@ Function PreventAppsReinstallation
 	Set-ItemProperty $registryOEM PreInstalledAppsEverEnabled -Value 0
 	Set-ItemProperty $registryOEM SilentInstalledAppsEnabled -Value 0
 	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0
+}
+
+Function ReinstallWindowsPhotoViewer
+{
+	reg import .\ReinstallPhotoViewer.reg
 }
 
 Function RemoveAssociatedRegitryKeys
@@ -162,7 +180,7 @@ Function UninstallOneDrive
 
 Function UninstallUnwantedUWP
 {
-	$WhitelistedApps = 'Microsoft.WindowsCalculator|Microsoft.Windows.Photos|Microsoft.MSPaint|Microsoft.WindowsCamera|.NET|Framework|Microsoft.ScreenSketch|Microsoft.WindowsAlarms'
+	$WhitelistedApps = 'Microsoft.WindowsCalculator|Microsoft.MSPaint|.NET|Framework|Microsoft.ScreenSketch|Microsoft.WindowsAlarms'
 	$NonRemovable = '1527c705-839a-4832-9118-54d4Bd6a0c89|c5e2524a-ea46-4f67-841f-6a9465d9d515|E2A4F912-2574-4A75-9BB0-0D023378592B|F46D4000-FD22-4DB4-AC8E-4E1DDDE828FE|InputApp|Microsoft.AAD.BrokerPlugin|Microsoft.AccountsControl|`
 	Microsoft.BioEnrollment|Microsoft.CredDialogHost|Microsoft.ECApp|Microsoft.LockApp|Microsoft.MicrosoftEdgeDevToolsClient|Microsoft.MicrosoftEdge|Microsoft.PPIProjection|Microsoft.Win32WebViewHost|Microsoft.Windows.Apprep.ChxApp|`
 	Microsoft.Windows.AssignedAccessLockApp|Microsoft.Windows.CapturePicker|Microsoft.Windows.CloudExperienceHost|Microsoft.Windows.ContentDeliveryManager|Microsoft.Windows.Cortana|Microsoft.Windows.NarratorQuickStart|`
@@ -176,10 +194,12 @@ Function UninstallUnwantedUWP
 
 DisableAppHost
 DisableContentDeliveryManager
+DisableEdge
 DisablePushToInstall
 DisableWindowsStore
 DisableWindowsFunctionalities
 PreventAppsReinstallation
+ReinstallWindowsPhotoViewer
 RemoveAssociatedRegitryKeys
 UninstallOneDrive
 UninstallPreloadedSoft

@@ -93,6 +93,7 @@ Function DisableXboxFunctionnalities
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AllowGameDVR -Value 0
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AppCaptureEnabled -Value 0
+	reg delete "HKLM\SYSTEM\CurrentControlSet\Services\xbgm" /f
 }
 
 Function EnableMSI
