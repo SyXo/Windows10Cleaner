@@ -7,7 +7,7 @@ Function DisableUnwantedServices
 		"diagnosticshub.standardcollector.service"	# Microsoft® Diagnostics Hub Standard Collector Service
 		# "diagsvc"
 		"DiagTrack"					# Diagnostics Tracking Service
-		"dmwappushservice"				# WAP Push Message Routing Service (see known issues)
+		"dmwappushservice"				# WAP Push Message Routing Service
 		"HomeGroupListener"				# HomeGroup Listener
 		"HomeGroupProvider"				# HomeGroup Provider
 		"lfsvc"						# Geolocation Service
@@ -16,6 +16,7 @@ Function DisableUnwantedServices
 		"ndu"						# Windows Network Data Usage Monitor
 		"NetTcpPortSharing"				# Net.Tcp Port Sharing Service
 		"OneSyncSvc"
+		"PushToInstall"
 		# "PcaSvc"					# Program compatibility assistant
 		"RemoteAccess"					# Routing and Remote Access
 		"RemoteRegistry"				# Remote Registry

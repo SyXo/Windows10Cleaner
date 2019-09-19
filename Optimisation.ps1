@@ -72,6 +72,11 @@ Function DisablePrefetch
 	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" EnablePrefetcher -Value 0
 }
 
+Function DisableUAC
+{
+	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" EnableLUA -Value 0
+}
+
 Function DisableUpdateMSRT
 {
 	if (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\MRT")) {
@@ -88,21 +93,6 @@ Function DisableXboxFunctionnalities
 	}
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AllowGameDVR -Value 0
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\GameDVR" AppCaptureEnabled -Value 0
-}
-
-Function InstallTimerTool
-{
-	$url = "https://vvvv.org/sites/all/modules/general/pubdlcnt/pubdlcnt.php?file=https://vvvv.org/sites/default/files/uploads/TimerToolV3.zip&nid=112931"
-	$zipLocation = $env:USERPROFILE + "\Downloads\TimerTool.zip"
-	$folderLocation = $env:USERPROFILE + "\Downloads\TimerTool"
-	$startupShortcutLocation = $env:APPDATA + "\Microsoft\Windows\Start Menu\Programs\Startup\TimerTool.bat"
-
-	Invoke-WebRequest -Uri $url -OutFile $zipLocation
-	Expand-Archive $zipLocation -DestinationPath $folderLocation
-	Move-Item -Path $folderLocation -Destination "C:\Program Files"
-	Remove-Item -Path $zipLocation
-	echo 'start "" "C:\Program Files\TimerTool.exe" -t 0.5 -minimized' > $startupShortcutLocation
-	echo exit >> $startupShortcutLocation
 }
 
 Function EnableMSI
@@ -145,9 +135,29 @@ Function ExploitRamQuantity
 	Set-ItemProperty -Path $path SvcHostSplitThresholdInKB -Value $result
 }
 
+Function GetOSVersion
+{
+	(Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ReleaseId
+}
+
 Function ImproveResponsiveness
 {
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" SystemResponsiveness -Value 0
+}
+
+Function InstallTimerTool
+{
+	$url = "https://vvvv.org/sites/all/modules/general/pubdlcnt/pubdlcnt.php?file=https://vvvv.org/sites/default/files/uploads/TimerToolV3.zip&nid=112931"
+	$zipLocation = $env:USERPROFILE + "\Downloads\TimerTool.zip"
+	$folderLocation = $env:USERPROFILE + "\Downloads\TimerTool"
+	$startupShortcutLocation = $env:APPDATA + "\Microsoft\Windows\Start Menu\Programs\Startup\TimerTool.bat"
+
+	Invoke-WebRequest -Uri $url -OutFile $zipLocation
+	Expand-Archive $zipLocation -DestinationPath $folderLocation
+	Move-Item -Path $folderLocation -Destination "C:\Program Files"
+	Remove-Item -Path $zipLocation
+	echo 'start "" "C:\Program Files\TimerTool.exe" -t 0.5 -minimized' > $startupShortcutLocation
+	echo exit >> $startupShortcutLocation
 }
 
 Function RemoveTempFiles
@@ -177,6 +187,7 @@ DisableFirewall
 DisableHPET
 DisableNdu
 DisablePrefetch
+DisableUAC
 DisableUpdateMSRT
 DisableXboxFunctionnalities
 EnableMSI
