@@ -55,6 +55,17 @@ Function DisableFirewall
 	Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall\StandardProfile" EnableFirewall -Value 0
 }
 
+Function DisableFvevol
+{
+        Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\fvevol" ErrorControl -Value 0
+	Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\fvevol" Start -Value 4
+}
+
+Function DisableLowerFilters
+{
+	Remove-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Class\{71A27CDD-812A-11D0-BEC7-08002BE2092F}" -Name "LowerFilters" -ErrorAction SilentlyContinue
+}
+
 Function DisableSyntheticTimers
 {
 	bcdedit /set useplatformtick yes
