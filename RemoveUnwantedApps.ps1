@@ -98,15 +98,18 @@ Function PreventAppsReinstallation
 
 Function RemoveSystemApps
 {
-        $whitelistedApps = 'ShellExperienceHost|InputApp|LockApp|FileExplorer|FilePicker|StartMenu'
+        $whitelistedApps = 'ShellExperienceHost|InputApp|LockApp|FileExplorer|FilePicker'
         $folders = Get-ChildItem "C:\Windows\SystemApps\"
 
         ForEach ($folder in $folders) {
 		taskkill /F /IM SearchUI.exe
+		taskkill /F /IM StartMenuExperienceHost.exe
                 $current = "C:\Windows\SystemApps\" + $folder.name
                 takeown /R /A /F $current /D N
                 icacls $current /grant Administrateurs:F /T /C
-                Remove-Item -LiteralPath $current -Force -Recurse | Where-Object { $current -NotMatch $whitelistedApps }
+		if ($current -NotMatch $whitelistedApps) {
+			Remove-Item -LiteralPath $current -Force -Recurse
+		}
         }
 }
 
@@ -119,7 +122,9 @@ Function RemoveWindowsApps
 		$current = "C:\Program Files\WindowsApps\" + $folder.name
                 takeown /R /A /F $current /D N
                 icacls $current /grant Administrateurs:F /T /C
-                Remove-Item -LiteralPath $current -Force -Recurse | Where-Object { $current -Match $whitelistedApps }
+		if ($current -Match $toDelete) {
+			Remove-Item -LiteralPath $current -Force -Recurse
+		}
         }
 }
 
