@@ -96,6 +96,33 @@ Function PreventAppsReinstallation
 	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0
 }
 
+Function RemoveSystemApps
+{
+        $whitelistedApps = 'ShellExperienceHost|InputApp|LockApp|FileExplorer|FilePicker|StartMenu'
+        $folders = Get-ChildItem "C:\Windows\SystemApps\"
+
+        ForEach ($folder in $folders) {
+		taskkill /F /IM SearchUI.exe
+                $current = "C:\Windows\SystemApps\" + $folder.name
+                takeown /R /A /F $current /D N
+                icacls $current /grant Administrateurs:F /T /C
+                Remove-Item -LiteralPath $current -Force -Recurse | Where-Object { $current -NotMatch $whitelistedApps }
+        }
+}
+
+Function RemoveWindowsApps
+{
+	$toDelete = 'Deleted|Deleted|Xaml|Mutable|Moved'
+	$folders = Get-ChildItem "C:\Program Files\WindowsApps"
+
+	ForEach ($folder in $folders) {
+		$current = "C:\Program Files\WindowsApps\" + $folder.name
+                takeown /R /A /F $current /D N
+                icacls $current /grant Administrateurs:F /T /C
+                Remove-Item -LiteralPath $current -Force -Recurse | Where-Object { $current -Match $whitelistedApps }
+        }
+}
+
 Function ReinstallWindowsPhotoViewer
 {
 	reg import .\ReinstallPhotoViewer.reg
@@ -201,6 +228,8 @@ DisableWindowsFunctionalities
 PreventAppsReinstallation
 ReinstallWindowsPhotoViewer
 RemoveAssociatedRegitryKeys
+RemoveSystemApps
+RemoveWindowsApps
 UninstallOneDrive
 UninstallPreloadedSoft
 UninstallUnwantedUWP

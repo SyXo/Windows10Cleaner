@@ -112,6 +112,7 @@ Function DisableWindowsUpgrade
 DisableAutoWindowsUpdate
 DisableErrorReporting
 DisableLicenseChecking
+DisableMaintenance
 DisableMicrosoftAccountSync
 DisableSystemRestore
 DisableUnwantedScheduledTasks

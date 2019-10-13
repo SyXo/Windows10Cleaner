@@ -197,8 +197,10 @@ DisableBackgroundApps
 DisableDefender
 DisableDefenderCloud
 DisableEdgeBackground
+DisableFvevol
 DisableFirewall
 DisableHPET
+DisableLowerFilters
 DisableNdu
 DisablePrefetch
 DisableUAC
