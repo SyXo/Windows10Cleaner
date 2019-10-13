@@ -96,9 +96,75 @@ Function PreventAppsReinstallation
 	Set-ItemProperty $registryOEM SystemPaneSuggestionsEnabled -Value 0
 }
 
+Function RemoveFlash
+{
+	Remove-Item -LiteralPath "C:\Windows\SysWOW64\flashPlayerCPLApp.cpl" -Force
+	Remove-Item -LiteralPath "C:\Windows\SysWOW64\flashPlayerApp.exe" -Force
+
+	takeown /R /A /F "C:\Windows\System32\Macromed\"
+	icacls "C:\Windows\System32\Macromed\" /grant Administrateurs:F /T /C
+	Remove-Item -LiteralPath "C:\Windows\System32\Macromed\" -Force -Recurse
+
+	takeown /R /A /F "C:\Windows\SysWOW64\Macromed\"
+	icacls "C:\Windows\SysWOW64\Macromed\" /grant Administrateurs:F /T /C
+	Remove-Item -LiteralPath "C:\Windows\SysWOW64\Macromed\" -Force -Recurse
+
+	takeown /R /A /F "C:\Users\Rodolphe\AppData\Roaming\Adobe\"
+	icacls "C:\Users\Rodolphe\AppData\Roaming\Adobe\" /grant Administrateurs:F /T /C
+	Remove-Item -LiteralPath "C:\Users\Rodolphe\AppData\Roaming\Adobe\" -Force -Recurse
+
+}
+
+Function RemoveIncludedTools
+{
+	takeown /f "C:\Windows\System32\backgroundTaskHost.exe"
+	icacls "C:\Windows\System32\backgroundTaskHost.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\backgroundTaskHost.exe" -Force
+
+	takeown /f "C:\Windows\System32\gamebarpresencewriter.exe"
+	icacls "C:\Windows\System32\gamebarpresencewriter.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\gamebarpresencewriter.exe" -Force
+
+	takeown /f "C:\Windows\System32\gamepanel.exe"
+	icacls "C:\Windows\System32\gamepanel.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\gamepanel.exe" -Force
+
+	takeown /f "C:\Windows\System32\magnify.exe"
+	icacls "C:\Windows\System32\magnify.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\magnify.exe" -Force
+
+	takeown /f "C:\Windows\System32\mblctr.exe"
+	icacls "C:\Windows\System32\mblctr.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\mblctr.exe" -Force
+
+	takeown /f "C:\Windows\System32\mobsync.exe"
+	icacls "C:\Windows\System32\mobsync.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\mobsync.exe" -Force
+
+	takeown /f "C:\Windows\System32\narrator.exe"
+	icacls "C:\Windows\System32\narrator.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\narrator.exe" -Force
+
+	takeown /f "C:\Windows\System32\osk.exe"
+	icacls "C:\Windows\System32\osk.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\osk.exe" -Force
+
+	takeown /f "C:\Windows\System32\smartscreen.exe"
+	icacls "C:\Windows\System32\smartscreen.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\smartscreen.exe" -Force
+
+	takeown /f "C:\Windows\System32\WSClient.dll"
+	icacls "C:\Windows\System32\WSClient.dll" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\WSClient.dll" -Force
+
+	takeown /f "C:\Windows\System32\WSCollect.exe"
+	icacls "C:\Windows\System32\WSCollect.exe" /grant administrateurs:f
+	Remove-Item -LiteralPath "C:\Windows\System32\WSCollect.exe" -Force
+}
+
 Function RemoveSystemApps
 {
-        $whitelistedApps = 'ShellExperienceHost|InputApp|LockApp|FileExplorer|FilePicker'
+        $whitelistedApps = 'ShellExperienceHost|LockApp'
         $folders = Get-ChildItem "C:\Windows\SystemApps\"
 
         ForEach ($folder in $folders) {
@@ -233,6 +299,7 @@ DisableWindowsFunctionalities
 PreventAppsReinstallation
 ReinstallWindowsPhotoViewer
 RemoveAssociatedRegitryKeys
+RemoveIncludedTools
 RemoveSystemApps
 RemoveWindowsApps
 UninstallOneDrive

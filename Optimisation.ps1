@@ -182,17 +182,6 @@ Function RemoveTempFiles
 	Remove-Item "C:\Users\*\Appdata\Local\Temp\*" -Recurse -Force
 }
 
-Function RemoveXboxRelatedExe
-{
-	takeown /f "C:\Windows\System32\GamePanel.exe"
-	icacls "C:\Windows\System32\GamePanel.exe" /grant administrateurs:f
-	Remove-Item -Path "C:\Windows\System32\GamePanel.exe" -Force
-
-	takeown /f "C:\Windows\System32\GameBarPresenceWriter.exe"
-	icacls "C:\Windows\System32\GameBarPresenceWriter.exe" /grant administrateurs:f
-	Remove-Item -Path "C:\Windows\System32\GameBarPresenceWriter.exe" -Force
-}
-
 DisableBackgroundApps
 DisableDefender
 DisableDefenderCloud
@@ -210,5 +199,4 @@ EnableMSI
 ExploitRamQuantity
 ImproveResponsiveness
 #InstallTimerTool
-RemoveXboxRelatedExe
 RemoveTempFiles
