@@ -4,8 +4,9 @@ $ErrorActionPreference = "SilentlyContinue"
 Function DisableUnwantedServices
 {
 	$services = @(
+		"BcastDVRUserService"
 		"diagnosticshub.standardcollector.service"	# Microsoft® Diagnostics Hub Standard Collector Service
-		# "diagsvc"
+		"diagsvc"
 		"DiagTrack"					# Diagnostics Tracking Service
 		"diagsvc"
 		"dmwappushservice"				# WAP Push Message Routing Service
@@ -17,22 +18,24 @@ Function DisableUnwantedServices
 		"ndu"						# Windows Network Data Usage Monitor
 		"NetTcpPortSharing"				# Net.Tcp Port Sharing Service
 		"OneSyncSvc"
+		"PimIndexMaintenanceSvc"
 		"PushToInstall"
 		# "PcaSvc"					# Program compatibility assistant
 		"RemoteAccess"					# Routing and Remote Access
 		"RemoteRegistry"				# Remote Registry
 		"RetailDemo"
 		"SessionEnv"
+		"Sgrmbroker"
 		"SharedAccess"					# Internet Connection Sharing (ICS)
-		"diagsvc"
-		# "shpamsvc"
 		"SessionEnv"
+		# "shpamsvc"
 		"SysMain"					# Superfetch's name on 1903+
 		"TermService"
 		"TrkWks"					# Distributed Link Tracking Client
 		"TroubleshootingSvc"
 		"UmRdpService"
-		# "UmRdpService"
+		"UnistoreSvc"
+		"UserDataSvc"
 		"WbioSrvc"					# Windows Biometric Service (required for Fingerprint reader / facial detection)
 		"wercplsupport"					# Problem report
 		"WerSvc"					# Windows report
@@ -55,14 +58,6 @@ Function DisableUnwantedServices
 
 Function FurtherDeleting
 {
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "wscsvc" ^| find /i "wscsvc"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "OneSyncSvc" ^| find /i "OneSyncSvc"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "MessagingService" ^| find /i "MessagingService"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "PimIndexMaintenanceSvc" ^| find /i "PimIndexMaintenanceSvc"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "UserDataSvc" ^| find /i "UserDataSvc"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "UnistoreSvc" ^| find /i "UnistoreSvc"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "BcastDVRUserService" ^| find /i "BcastDVRUserService"') do (reg delete %I /f)
-	for /f "tokens=1" %I in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services" /k /f "Sgrmbroker" ^| find /i "Sgrmbroker"') do (reg delete %I /f)
 	sc delete diagnosticshub.standardcollector.service
 	reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f
 	reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /f
@@ -77,7 +72,7 @@ Function FurtherDeleting
 	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoRecentDocsHistory" /t REG_DWORD /d 1 /f
 	reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\CompatTelRunner.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
 	reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\DeviceCensus.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
-	regini .\TakeKeyOwnership
+	# regini .\TakeKeyOwnership
 }
 
 DisableUnwantedServices

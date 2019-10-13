@@ -196,6 +196,6 @@ DisableXboxFunctionnalities
 EnableMSI
 ExploitRamQuantity
 ImproveResponsiveness
-InstallTimerTool
+#InstallTimerTool
 RemoveXboxRelatedExe
 RemoveTempFiles

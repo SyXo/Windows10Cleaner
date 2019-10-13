@@ -41,7 +41,7 @@ Function EnhanceBootSequence
 }
 
 ChangeSleepTimeout
-ChangePowerPlan
+#ChangePowerPlan
 DisableFastBoot
 DisableHibernation
 EnhanceBootSequence
