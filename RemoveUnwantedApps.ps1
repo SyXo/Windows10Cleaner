@@ -117,6 +117,10 @@ Function RemoveFlash
 
 Function RemoveIncludedTools
 {
+	takeown /f "C:\Windows\helpPane.exe"
+	icacls /f "C:\Windows\helpPane.exe"
+	Remove-Item -LiteralPath "C:\Windows\System32\helpPane.exe" -Force
+
 	takeown /f "C:\Windows\System32\backgroundTaskHost.exe"
 	icacls "C:\Windows\System32\backgroundTaskHost.exe" /grant administrateurs:f
 	Remove-Item -LiteralPath "C:\Windows\System32\backgroundTaskHost.exe" -Force
@@ -299,6 +303,7 @@ DisableWindowsFunctionalities
 PreventAppsReinstallation
 ReinstallWindowsPhotoViewer
 RemoveAssociatedRegitryKeys
+RemoveFlash
 RemoveIncludedTools
 RemoveSystemApps
 RemoveWindowsApps
