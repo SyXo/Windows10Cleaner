@@ -9,6 +9,7 @@ Function DisableUnwantedServices
 		"ALG"						# Application Layer Gateway Service
 		"AppMgmt"					# Application Management
 		"AppReadiness"					# Disabling App Readiness
+		"AppVClient"					# Microsoft App-V Client
 		"AssignedAccessManagerSvc"			# AssignedAccessManager
 		"BcastDVRUserService"
 		"BDESVC"					# BitLocker Drive Encryption Service
@@ -19,6 +20,8 @@ Function DisableUnwantedServices
 		"CDPSvc"					# Connected Devices Platform Service
 		"CertPropSvc"					# Certificate Propagation
 		"ClipSVC"					# Client License Service (ClipSVC)
+		"CscService"					# Offline Files
+		"defragsvc"					# Optimise drives
 		"diagnosticshub.standardcollector.service"	# Microsoft® Diagnostics Hub Standard Collector Service
 		"diagsvc"					# Diagnostic Execution Service
 		"DiagTrack"					# Diagnostics Tracking Service
@@ -37,27 +40,57 @@ Function DisableUnwantedServices
 		"HomeGroupListener"				# HomeGroup Listener
 		"HomeGroupProvider"				# HomeGroup Provider
 		"HvHost"					# HV Host Service
+		"IEEtwCollectorService"				# Internet Explorer ETW Collector Service
+		"iphlpsvc"					# IP Helper
+		"IpxlatCfgSvc"					# IP Translation Configuration Service
+		"InstallService"				# Microsoft Store Install Service
+		"irmon"						# Infrared monitor service
 		"KeyIso"					# CNG Key Isolation
 		"lfsvc"						# Geolocation Service
+		"lltdsvc"					# Link-Layer Topology Discovery Mapper
 		"MapsBroker"					# Downloaded Maps Manager
 		"MessagingService"
 		"MSDTC"						# Distributed Transaction Coordinator
+		"MSiSCSI"					# Microsoft iSCSI Initiator Service
+		"NaturalAuthentication"				# Natural Authentification
+		"NcaSvc"					# Network Connectivity Assistant
+		"NcbService"					# Network Connection Broker
+		"NcdAutoSetup"					# Network Connected Devices Auto-Setup
 		"ndu"						# Windows Network Data Usage Monitor
+		"Netlogon"					# Netlogon
 		"NetTcpPortSharing"				# Net.Tcp Port Sharing Service
+		"NgcSvc"					# Microsoft Passport
+		"NgcCtnrSvc"					# Microsoft Passport Container
 		"OneSyncSvc"
+		"p2pimsvc"					#Peer Networking Identity Manager
+		"p2psvc"					# Peer Networking Grouping
 		"PeerDistSvc"					# BranchCache
+		"PcaSvc"					# Program Compatibility Assistant Service
+		"PhoneSvc"					# Phone Service
 		"PimIndexMaintenanceSvc"
+		"pla"						# Performance Logs & Alerts
+		"PNRPsvc"					# Peer Name Resolution Protocol
+		"PolicyAgent"					# IPsec Policy Agent
+		"PrintNotify"					# Printer Extensions and Notifications
 		"PushToInstall"
 		# "PcaSvc"					# Program compatibility assistant
+		"QWAVE"						# Quality Windows Audio Video Experience
+		"RasAuto"					# Remote Access Auto Connection Manager
+		"RasMan"					# Remote Access Connection Manager
 		"RemoteAccess"					# Routing and Remote Access
 		"RemoteRegistry"				# Remote Registry
 		"RetailDemo"
+		"SEMgrSvc"					# Payments and NFC/SE Manager
 		"SessionEnv"
 		"Sgrmbroker"
 		"SharedAccess"					# Internet Connection Sharing (ICS)
-		"SessionEnv"
+		"SessionEnv"					# Remote Desktop Configuration
 		# "shpamsvc"
+		"smphost"					# Microsoft Storage Spaces SMP
+		"SmsRouter"					# Microsoft Windows SMS Router Service
+		"Spooler"					# Print Spooler
 		"Superfetch"					# Versions older than 1903
+		"swprv"						# Microsoft Software Shadow Copy Provider
 		"SysMain"					# Superfetch's name on 1903+
 		"TermService"
 		"TrkWks"					# Distributed Link Tracking Client
@@ -69,7 +102,12 @@ Function DisableUnwantedServices
 		"VaultSvc"					# Credential Manager
 		"vmickvpexchange"				# Hyper-V Data Exchange Service
 		"vmicguestinterface"				# Hyper-V Guest Service Interface
+		"vmicheartbeat"					# Hyper-V Heartbeat Service
+		"vmicrdv"					# Hyper-V Remote Desktop Virtualization Service
 		"vmicshutdown"					# Hyper-V Guest Shutdown Service
+		"vmictimesync"					# Hyper-V Time Synchronization Service
+		"vmicvmsession"					# Hyper-V PowerShell Direct Service
+		"vmicvss"					# Hyper-V Volume Shadow Copy Requestor
 		"wbengine"					# Block Level Backup Engine Service
 		"WbioSrvc"					# Windows Biometric Service (required for Fingerprint reader / facial detection)
 		"WdiServiceHost"				# Diagnostic Service Host
@@ -78,8 +116,10 @@ Function DisableUnwantedServices
 		"WerSvc"					# Windows report
 		# "WlanSvc"					# WLAN AutoConfig (WiFi Networks)
 		"WMPNetworkSvc"					# Windows Media Player Network Sharing Service
-		"wlidsvc"
 		"wisvc"						# Windows Insider service
+		"wlidsvc"					# Microsoft Account Sign-in Assistant
+		"WpcMonSvc"					# WpcMonSvc
+		"WPDBusEnum"					# Portable Device Enumerator Service
 		"wscsvc"					# Windows Security Center Service
 		# "WSearch"					# Windows Search
 		"XblAuthManager"				# Xbox Live Auth Manager
@@ -95,7 +135,6 @@ Function DisableUnwantedServices
 
 Function FurtherDeleting
 {
-	sc delete diagnosticshub.standardcollector.service
 	reg add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules" /v "NumberOfSIUFInPeriod" /t REG_DWORD /d 0 /f
 	reg delete "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Siuf\Rules" /v "PeriodInNanoSeconds" /f
 	reg add "HKLM\SYSTEM\ControlSet001\Control\WMI\AutoLogger\AutoLogger-Diagtrack-Listener" /v Start /t REG_DWORD /d 0 /f
