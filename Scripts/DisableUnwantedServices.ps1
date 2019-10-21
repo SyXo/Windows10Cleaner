@@ -67,16 +67,16 @@ Function DisableUnwantedServices
 		"MSDTC"						# Distributed Transaction Coordinator
 		"MSiSCSI"					# Microsoft iSCSI Initiator Service
 		"NaturalAuthentication"				# Natural Authentification
-		"NcaSvc"					# Network Connectivity Assistant
-		"NcbService"					# Network Connection Broker
-		"NcdAutoSetup"					# Network Connected Devices Auto-Setup
+		#"NcaSvc"					# Network Connectivity Assistant
+		#"NcbService"					# Network Connection Broker
+		#"NcdAutoSetup"					# Network Connected Devices Auto-Setup
 		"ndu"						# Windows Network Data Usage Monitor
-		"Netlogon"					# Netlogon
+		#"Netlogon"					# Netlogon
 		"NetTcpPortSharing"				# Net.Tcp Port Sharing Service
 		"NgcSvc"					# Microsoft Passport
 		"NgcCtnrSvc"					# Microsoft Passport Container
 		"OneSyncSvc"
-		"p2pimsvc"					#Peer Networking Identity Manager
+		"p2pimsvc"					# Peer Networking Identity Manager
 		"p2psvc"					# Peer Networking Grouping
 		"PcaSvc"					# Program Compatibility Assistant Service
 		"PeerDistSvc"					# BranchCache
@@ -164,7 +164,7 @@ Function DisableUnwantedServices
 		"WEPHOSTSVC"					# Windows Encryption Provider Host Service
 		"wercplsupport"					# Problem report
 		"WerSvc"					# Windows report
-		"WFDSConMgrSvc"					# Wi-Fi Direct Services Connection Manager Service
+		# "WFDSConMgrSvc"				# Wi-Fi Direct Services Connection Manager Service
 		# "WlanSvc"					# WLAN AutoConfig (WiFi Networks)
 		"wisvc"						# Windows Insider service
 		"WinDefend"					# Windows Defender Antivirus Service
