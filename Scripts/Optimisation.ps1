@@ -159,16 +159,14 @@ Function ImproveResponsiveness
 
 Function InstallTimerTool
 {
-	$url = "https://vvvv.org/sites/all/modules/general/pubdlcnt/pubdlcnt.php?file=https://vvvv.org/sites/default/files/uploads/TimerToolV3.zip&nid=112931"
-	$zipLocation = $env:USERPROFILE + "\Downloads\TimerTool.zip"
-	$folderLocation = $env:USERPROFILE + "\Downloads\TimerTool"
+	$zipLocation = ".\Software\TimerToolV3.zip"
+	$folderLocation = ".\Software\TimerTool"
 	$startupShortcutLocation = $env:APPDATA + "\Microsoft\Windows\Start Menu\Programs\Startup\TimerTool.bat"
 	$command = 'start "" "C:\Program Files\TimerTool\TimerTool.exe" -t 0.5 -minimized'
 
-	Invoke-WebRequest -Uri $url -OutFile $zipLocation
 	Expand-Archive $zipLocation -DestinationPath $folderLocation
 	Move-Item -Path $folderLocation -Destination "C:\Program Files"
-	Remove-Item -Path $zipLocation
+	New-Item -Path $startupShortcutLocation -ItemType File
 	Clear-Content $startupShortcutLocation
 	Add-Content $startupShortcutLocation $command
 	Add-Content $startupShortcutLocation "exit"
@@ -198,5 +196,5 @@ DisableXboxFunctionnalities
 EnableMSI
 ExploitRamQuantity
 ImproveResponsiveness
-#InstallTimerTool
+InstallTimerTool
 RemoveTempFiles
