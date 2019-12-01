@@ -115,7 +115,7 @@ Function EnableMSI
 		$key = $element.Name -replace "HKEY_LOCAL_MACHINE", "HKLM:"
 		$subkey = Get-ChildItem $key
 		$subkey = $subkey -replace "HKEY_LOCAL_MACHINE", "HKLM:"
-		$value = Get-ItemProperty -Path $Subkey -Name "DeviceDesc"
+		$value = Get-ItemProperty -Path $subkey -Name "DeviceDesc"
 		if ($value -match "amd" -or $value -match "nvidia" -or $value -match "audio") {
 			$msi = $subkey + "\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties"
 			if (!(Test-Path $msi)) {
